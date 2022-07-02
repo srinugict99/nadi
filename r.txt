@@ -1,0 +1,860 @@
+1 - Introduction
+--------------------------
+what is react?
+open source libaray for building user interface
+not a framework
+focus on UI
+rich ecosystem
+---
+component based arch
+reusable code
+declarative: tell react what you want and react will build the actual UI
+react will handle efficantly updating and rendering of the components
+Dom updates handle gracefully
+--
+seeamlesly integrate react into any of your application
+portion of page or complete page or entire application itself
+reactive native for mobile application
+--------------------------------------------------------------------
+2 - Hello World
+npx : npx create-react-app project name
+npx: npm package runner which get installed on node
+direcly run without install
+
+
+npm: npm install create-react-app -g
+     create-react-app project name
+install create-app globally and run on this
+---------------------------------------------------------------------
+3 - Folder Structure
+package.json: dependycs and scripts req for projects
+ dependcns : 16.8.0 
+scripts : for start build and run tests
+
+packae.json files: constst installtion of dependecys
+node modules : all dependys installation
+public: maifest.json: progressive webapps
+favicn.ico: react pic
+index.html:  no change here may be header part
+index.js: we specify the root component which is app component  and dom element which will be controlled by react 
+dom element in our example is 'root'
+index.html root dom node control   every thing control by react
+hello world example App will render inside 'root' node
+-------------------------------------------------------------------
+4 - Components
+class comp
+functional compoents
+components describes a part of the user interface
+they are re usable and can be nested inside other components
+------------------------------------------------------------------------------
+5.functional component 
+just js functions 
+optioanlly recive object of properties which is reffred to props and return as html describe as UI
+
+export
+default: any name we can import 
+ named : same name inside {}
+--------------------------------------------------------------------------------------
+6 - Class Components
+maintain state inside
+
+diff
+
+class:  maintain their own private data
+complex ui logic
+provide liecycle hooks
+stateful/smart/container
+
+functional:
+simple functions
+use compoent as much as possible
+absence of 'this'
+solution without state
+maintain responsible for the UI
+stateless/dumb/presentional
+-----------------------------------------------------------
+7.hooks update
+--------------------------------------------------------
+8.jsx
+extenstion to the js langauage syntax
+write xml like code for elements and components
+like xml tags have tag name , attributes and children
+why
+jsx not necessity to write react apps
+jsx make code simpleer and elegent 
+jsx ultimetly transpiles to pure js which is understood by browser
+
+how does it work
+jsx version
+
+const hello = () => {
+return (
+<>
+<h1>hello</h1>
+<h2>world</h2>
+</>
+)
+}
+without jsx: react provide react crete element
+const hello = () => {
+return React.createElement('div', null, 'hello world')//accept minimum  three params
+}
+above h1 is heading is missing so
+return React.createElement('div', null, '<h1>hello world</h1>')
+output broswer is <h1>hello world</h1>
+React.createElement('div', null, React.createElement(<h1>, null, 'hello world')
+
+1st params is  a 'string' which specfis html tag is render
+2nd is optional properties, it is objects of key value pairs that will apply to the element
+React.createElement('div', {id: "hello", className: "className"}, 'hello world')
+3rd is children for div tag
+
+
+each jsx elemet is sytatical sugar for calling create element
+
+import React from 'react'
+why it import even not using in es6 function 
+
+jsx translte into react.creteelemnt which is turns into react libary
+
+-----------------------------
+9.props: what render in browser
+-------------------------------------------
+optianal for components
+we can resue same component by specfiging the as props
+<Greet name="srinu">
+<Greet name="vasu">
+<Greet name="rao">
+props if you know for sure pass as arugements props
+do not or dynamic html content use children pops
+---------------------------------------------------------
+10.state
+object inside component tell what render in browser 
+----------------------------
+11. setstate
+-----------------------
+-when we use directly state.counter +1 it not re render the page console show increment but not in browser .if we use set state then only re render page
+
+increment(){
+this.setState({
+count: state.count +1
+})
+console.log("count" count)
+}
+afte use setstate browser one incremented but console.log 0 why? console value is lessthan one of render value bz calls in setstate is async
+bz above console.log calls before state actually set.
+react makes group multiple set state calls into single 
+
+this.setState((prevState, props) => ({
+
+1.always use setstate do not directly modify state
+2.code has to be executed after the state has been updated?    place that code in the call back function  which is second argument to the setstate method
+3.when you have to update state based on previous state value , pass in a function as an argument insted of the regualr object.
+----------------------------------------------------------------------
+12: Destructuring
+--------------------------------------------------------
+const {name} = this.props  RCC
+const {name} = props RFC
+------------------------------------------------------------------
+13 - Event Handling
+onclick fuction has event handler rather than string
+not "clickhandler()"
+like {clickhandler}
+we need only function not function call in FC if we give {clickhandler()} parathsis,  here in browser reload it prints console.log('something') directly, 
+and later if click on button not print anything.
+in CC when click handler changes state of the compoennt . components constousuly re render and infineite no of messages
+event handler is a function not a function call not add parathisis()
+
+in CC 
+methods will be access using this keyword
+{this.clickclass}
+
+-------------------------------------------------------------------------------------------------
+14 - Binding Event Handlers
+
+onClick = {this.clickhandler}->trying to use setstate it gives error  can not read setstate of undiened
+console. 'this'  it is undefined
+so this keyword with in event handler is undefined
+no of ways we can bind event handler
+1.binding in render method
+this.clickhandler.bind(this)- but every update state cause compoentn re render , impact on performance in large apps if nested children
+2.array function render method
+onClick= {()=>this.clickhandler()}->  for clickhandler not requried the {} and return bz it is single statement
+here we are calling the event handler and returning value so () is requied this approch.
+//problebly child components some performance
+3.most of cases
+binding in construcor
+this.clickhandler = this.clickhandler.bind(this)// react refers
+4.using array function as class property // experimentnal feature
+clickhandler=()=>{
+this.setState({
+nane: 'ok'})
+}
+
+onclick={this.clickhandler}
+
+
+--
+this' keyword is undefined because this used with a function returns 'window' object on the browser and 'global' object inside nodejs environment. 
+Since 'react strict mode' is enabled, it is returning 'undefined'.
+--
+First of all "this" keyword points the Parent element on which it is called . 
+So when you use a Named function with the "this" keyword inside it  , it isn't binded to anything at all ..
+So the control passes to the "Window" element . So the Window element acts as a parent to the Named function . 
+We see "Undefined" here because we use "Strict mode " in Javascript . What Strict Mode does is, 
+if there is a named function( without any Bind method ) it transfers control to the parent element(window element) as i said ..
+this action is blocked by the strict mode ..So you see "undefined" in there ...
+However if you take off the strict mode ,you should see it will return the Window object ... 
+The One Stop Solution to all of this is using arrow functions which takes parent element as the Class and not the window object .
+--
+function usingGlobal(){
+
+return this;
+
+}
+
+console.log(usingGlobal === window) 
+
+o/p: True // because 'this' by default  global object
+
+ function notGlobal(){
+
+'use strict';
+return this;
+
+}
+
+console.log(notGlobal === window) 
+
+o/p: False // because 'this' is not equal to the global object because in the 'strict' mode so its no more global object
+--
+
+--------------------------------------------------------------------------------------------------------------------
+15 - Methods as props
+--------------
+parent to child comunicate we use props
+child to comunicate the parent compoentnd?   again props
+this time we passing reference to method as props to child component
+
+basicall child components calls parent components method achive as props 
+
+finally called method in the parent compoennt from button child component  by passing method as props to the child component
+next how to pass parameter from child component
+---------------------------------------------------------------------------------------------------------------
+16 - Conditional Rendering:
+
+1.
+if else writing in render very more lines
+ef else do not work not work on jsx
+jsx is syantic sugar coting function calls and obj constructions
+so if else outside jsx and entire return stmt continging jsx is placed if or else block.
+2.element variables
+use js variables to store varaibles
+stores the element to be render
+3.ternary conditonal opeartor
+4.short circut opeatoor : 
+
+-------------------------------------------------------------------------------------
+ 17 - List Rendering
+each element and apply transform
+react transform into  jsx
+-----------------------------------------------------------
+18 - Lists and Keys
+
+A “key” is a special string attribute you need to include when creating lists of elements.
+Keys give the elements a stable identity.
+Keys help React identify which items have changed, are added, or are removed.
+This results in a much more efficient update of the user interface.
+-----------------------------------------------------------
+19 - Index as Key Anti-pattern
+when to use index of key:
+1.the items in key do not have a unique id
+2.the list is a static list and will not change
+3.the list will never be recorded or filtred
+-------------------------------------------------------------
+20 - Styling and CSS Basics
+--------------------------------------------------------------
+1.css style sheets
+2.inline styling
+3.css modules
+4.css in js libraries
+-----------------------------------------------------------------
+21 - Basics of Form Handling
+react we control the elements is controlled components
+
+<form>
+<input type="text>
+
+</form>
+still now it is html controller not react 
+to make react controller follow 2 steps
+1.create the state in constrour
+assign this value to input this.state.user
+but now not refelecting the changes in input
+2.so use onchange handler
+<button type="submit">submit</button>: page refresh
+so <form onsubmit={this.handlesubmit}>
+need to enter the submit use 
+<button type="submit">submit
+---------------------------------------------------------------
+ 22 - Component Lifecycle Methods
+
+Mounting: when instance of component is being created and inserted into the dom
+updating: when component is being re rendrend as a result of changes to either its props or state.
+unmounting: when component is being removed from the dom.
+error handling: when there is error during renderring , in a life cycle method or the constrcutor of any child component.
+Mounting:
+
+construcor:
+---
+A speaial function that will get called whenever a new component is created.
+initling the state and binding the event handlers
+do not cause side effects
+static getDerivedStateFromProps(props,state):
+---
+return new state or null
+when state of component is depends on changes in props over time
+set the state
+do not side effects 
+static: no 'this'
+render():
+--
+only req method
+read props and state and return JSX
+pure unction
+do not change the state or interact with dom or make ajax calls
+children component lefecycle methods are also executed
+--
+componentdidmount:
+calls only once in lifecycle invoked immeadialy after component and all its children components have been renderd to the dom
+for side effects interact with dom ajax calls.
+
+
+Lifecycle A constructor
+Lifecycle A getderivedsattefromprops
+Lifecycle A render
+Lifecycle B constructor
+Lifecycle B getDerivedstatefromprops
+Lifecycle B render
+Lifecycle B compoentnDidMount
+Lifecycle A compoenntDidMount
+-----
+24 - Component Updating Lifecycle Methods
+--------------------------------------------------------------------------------------
+methods that called when component render bz changes state or props
+
+
+static getDerivedStateFromProps(props,state):
+return null or object represnet updated state of compoent
+it calls every time a component is renrendred
+
+state the depends on props of the compinent
+
+ShouldComponentUpdate(nextprops, nextstate)
+tell if the component should rerender or not
+by default all class componets re render when they is props recive or state changes
+it prevents that default behevour by return false 
+by compare existing props and state values with nextprops and state values and return true or false let react know  whether component  render or not 
+it is for perfomance optimization
+do not cause side effects or setset method
+---
+render
+only req method
+read props and state and return jsx
+do not change the state or interact with dom or make ajax calls
+--
+getSnapshotbeforeupdate(prevprops, prevstate)
+aceepts prevous props and prevstate as params and called right before the changes form the virtual are to be reflected in the dom
+capture some info from dom for ex we can read users scroll postion and after update maintain  the scroll postion  for performing some calculations
+method will return null or return a value.
+returned method value will be passed as the third parameter to the componentdidupdate.
+so getSnapshotbeforeupdate sused to read current domstate and a returns a value or null.
+--
+componentdidupdate(prevProps, prevState, snapshot)
+it called after the render is finished in the re -render cycles. means you can sure the compoent and all sub components is properly render after update
+3 params
+calls once in each re render cycle
+casue side efffect, but ajax calls test with prev props and current props is good idea
+
+---
+componentwillunmount()
+method is invoked immiadetly before a component is unmounted and destroyed
+cancelling network req, removing event handlers, cancelling any sbuscrptions, and invalidating timers
+do not call setstate method
+------------------------------------------------------------------------------------------------
+25 - Fragments
+1.group list of childrens without having extra node in dom.
+<h1></h1>
+<p></p>
+jsx expressions must have one parent element
+<div>
+<h1></h1>
+<p></p>
+</div>
+here extra div added in devtools 
+so <></>
+
+
+2.<div>
+<td> 
+<td> error td can not appear as child of div so <></>
+</div>
+3.list key
+const items= []
+{
+items.map((item)=>(
+<React.fragment key ={item.id}>// as of now only key as the allowed attribute for fragment
+<h1>title</h1>
+<p>{item.tilele}</p>
+</React.framnent>
+))
+}
+----------------------------------------------------------------------------------------------------------
+26 - Pure Components
+extends purecomponent
+
+parent component:
+
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        username: "rao",
+      });
+    }, 2000);
+  }
+
+reg comp
+pure comp
+
+
+reg comp re render every 2 sec
+but pure comp never re render
+
+
+regualr components:
+A regular components does not implement the shouldComponentUpdate method.It always return true by default
+
+pure component
+A pure component on other hand implements shouldcomponentupdate with a shallow props and state comparasion
+sc of prevState with currentState -> diff ->it re render
+sc of prevProps with current props -> diff-> it re renders
+
+shallow comparsion
+
+primitive types:
+
+a (sc) b returns true  if a and b have the same value and are of the same type.
+ex: string 'srinivas'(sc) string 'srinivas' returns true
+
+complex types: like objects and arrays
+a (sc) b returns true if a and b ref the exact same object.
+
+
+
+var a = [1,2,3]
+var b = [1.2,3]
+var c=a;
+var ab_eq  = (a===b)//false
+var ca_eq  = (a===c)//true
+
+var a = {x:1, y: 2}
+var b = {x:1, y: 2}
+var c=a
+var ab_eq= (a===b)//false
+var ac_eq= (a===c)//true
+
+so why use pure components?
+prevent unnecssary renders , gives performance boost for in certain scenarios
+so always return new array or object dealing with pure component
+summary:
+we can create a component by extending the pure component class
+a pure component implememnts the shouldcomponentupdadate lifecycle method by perfoeming a shallow comparasion on the props and state of the component
+if there is diff , the component not rerenderd -perfomance boost
+it is good idea to ensure that all the children components are also pure to avoid unexpected beheviour
+never mutate the state . always return a new object that reflects the new state
+------------------------------------------------------------
+27 - memo
+pure components works class based components
+how in functional?
+React.memo
+
+----------------------------------------------------
+28.refs
+refs makes it possible access dom nodes directly with in react
+
+1 use case ex focusing a text filed when loaded page username input is focus
+make 3 steps:
+1.create a ref
+constructor(props){
+this.inputRef = React.createRef()
+}
+2.attach to this ref to our input elelment in the  render method
+to attach a ref we use reserved ref attribute
+
+<input type="text" ref={this.inputRef}/>
+3.call focus method on element method
+console(this.inputRef) in compondnedDidMount()
+this.inputRef.current.focus()
+2.use case fetch the input value
+<button onclick= {this.clickHandler}></button>
+clickHandler()=>{
+console.log(this.inputref.current.value}//basically we are accing the value property of input dom node whiach is avaiable as the current property
+}
+this is oneway to create and access refs using createRefs
+react also supports 2nd way tos et ref as callback ref
+slight olderapproch
+4 steps
+--------------------------------------------------------------
+31.portals
+provide way to render children into a dom node that exists outside dom hirachy of parent component.
+everyhing is under root in broswer
+what react portals provide is the ability break out of this dom tree
+so we can render a component on dom node that is not under this root element
+1.crete dom node index.html
+<div id="root"></div>
+<div id="portal-root"></div>
+2.create new component
+protaldemo.js
+add in app
+it still old id root
+3.so create reactdom.portal to insde
+import ReactDOM
+function poratlDemo(){
+return ReactDOM.createPortal(it is 2 params 1.jsx is render, 2 is dom nod to mount  element onto)
+}
+return ReactDOM.createPortal(
+<h1>
+portal demo
+</h1>,
+document.getElementbyID('portal-root'))
+now it not under root it is under porat-root
+so why this?
+one of the use case is having parant component css when child is model , popup, css
+-------------------------------------------------------------------
+32 - Error Boundary
+Error handling phase methods
+static getDerivedStateFromError(error)
+componentDidCatch(error, info)
+runtime errors broken state
+what great  if catch in component tree display fallback ui
+class component that implements either one or both of the lifecycle methods getDerivedStateFromError or componentdidCatch becomes an error boundary
+the static method getDerivedStateFromError method is used to render a fall back ui is thrown and the comonentDidCacth method is used to log the error infomation
+
+
+if error comes only that component fallback ui remain should unefeected
+error boundary is primarly used for produnction
+but dev highly visible as possible
+
+error boundarys will catch the erros and display the fallback ui like something went wrong
+app.js
+
+<ErrorBoundary>
+        <Hero heroName="srinu"></Hero>
+        <Hero heroName="vasu"></Hero>
+        <Hero heroName="joker"></Hero>
+      </ErrorBoundary>
+
+now something went right only print
+ <ErrorBoundary>
+        <Hero heroName="srinu"></Hero>
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <Hero heroName="vasu"></Hero>
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <Hero heroName="joker"></Hero>
+      </ErrorBoundary>
+
+now srinu
+vasu print
+and something went right
+
+so error boundary catch errors during rendering in lifecycle methods and in constructors of the whole tree below them.
+not catch in event handlers if we want here use regular try catch 
+summary:
+Errorbounadries are react components that catch js error in their child component tree , log those errors, and display fall back ui
+a class component becomes error boundaries by defining either or both of getDerivedStateFromError and componentDidCatch lifecycle methods
+the placement of error boundary matters as it controls if the entire app should have the fall back ui or just the component causing the problem
+provide a way to gracefullly handle error in application code.
+-------------------------------------------------------------
+38-context (part 1)
+contexts provide data a way to pass data throgh the component tree without having to pass props down manually at every level.
+--------------------------------------------------------------
+39 - Context (Part 2)
+three steps to implememtnt context
+1.create the context
+2.provide a context value
+3.consume the context value
+appcomponent(username)
+componetnc(username)
+e(username)
+f(username)
+
+step1:
+
+new file:
+with in file we use createContext method  from react to create usercontext
+every context object created using createContext method  comes with provided and consumer react components
+const UserContext =React.createContext()
+
+const UserProvider= UserContext.Provider
+const UserConsumner= UserContext.Consumer
+export {UserProvider, UserConsumer}
+
+
+2.userprovider wrap in app component 
+provide is responsible for providing value for all decendend components so 
+<userprovider value ="srinivas">//this value  can consume any of its decenden component
+<componentC />
+<userProvider>
+3.in component  where user name is req use consumer component and pass a function as child . a function recives context value as  a parameter which can be used 
+compoenntF:
+
+<userconsumer>
+{
+username=>{
+return <div>hello {username}</div>
+}
+}
+</userconsumer>
+
+--------------------------------------------------------------------
+40 - Context (Part 3)
+1.we can provide default value also
+const UserContext= React.createContext("vasu")
+const UserProvider= UserContext.Provider
+const UserConsumner= UserContext.Consumer
+export {UserProvider, UserConsumer}
+
+appcomonent:
+//<userprovider value ="srinivas">
+<component C/> 
+//<userProvider> if comment it takes as vasu or override with srinivas
+2.
+consumeing multiple contexts:
+
+---------------------------------
+42 - HTTP GET Request
+render() {
+    return (
+      <div>
+        post list
+        {this.state.posts.length
+          ? this.state.posts.map((post) => <h1 key={post.id}>{post.title}</h1>)
+          : null}
+      </div>
+    );
+flow:
+call constructor next render print post list after check posts.length is false next didmount() and api response get  updated post state then render() call again
+------------------------------------------------------------------------
+43 - HTTP Post Request
+--------------------------------------------------------------------------------------------------
+2 - useState Hook
+useState(0) accepts an argument of initial value of the state property  and returns current satate value of property and method that is capable of updating that
+state property.
+count: contain current state value
+setCount: wull accept an arguemnt and set count  value to that  argument
+
+first time component renders the state variable will created and intialize with default value of zero.
+defalut value will nerver use in re renders
+when first click count is incremrnted to 1 from zero. after that setcount method will cause to component re render
+after re render count  will contain value of  1 which display on browser  
+
+only calls at top levels
+do not call hooks inside loops, or nested functions
+only calls hooks from react functions
+call them from react functional components and just any regular functions
+------------------
+3 - useState with previous state
+when based on previous state value use 
+setCount(prevCount => prevCount + 1);
+-----------------------------
+4 - useState with object
+use  state does not automatically merge and update the object. manually we have to merge
+onChange={(e) => setName({ ...name, lastName: e.target.value })}: copy every property in object  and just override last name with new value.
+-------------------------------------------------
+5-useState with array
+setItems([
+      ...items,
+      {
+        id: items.length,
+        value: Math.floor(Math.random() * 10) + 1,
+      },
+    ]);
+------
+summary:
+the use state hooks lets you add state to functional components.
+in classs the state is always an object
+with use state hook, the state does not have to be an object.
+usestate hooks returns array with 2 elements
+the first element is the current value of state , and the second element is a state setter function
+new state value depends on the previous state value ? you can pass a function to the setter function
+when dealing the objects or arrays , always make sure to spread your state varaible and than call the setter function
+---------------------------
+6 - useEffect Hook
+
+the effect hook lets you perform the side effects in functional component.
+closer replacement for compoent DidMount, componentDidUpdate, and componentWillMount
+------------------------------------
+7 - useEffect after render
+use effect pass paraeemmter a function execute after every render
+we can use state and props without writing additional code
+use effect runs on every render so after first render and every render and we can custommize
+---------------------
+8 - Conditionally run effects
+[count]->when count change then only run
+2nd param as array and look for change state or prop
+--------------------------------------------
+9 - Run effects only once
+initial render only  []
+-------------------------------------------
+15 - useContext Hook Part 1
+contexts provide data a way to pass data throgh the component tree without having to pass props down manually at every level.
+---------------------------
+16 - useContext Hook Part 2
+step1: create the context
+2 .need to provide this context with a value
+provider must be wrap children components value to be avaiable 
+3.consume the context value
+
+it is good for 1 consume if multiple contexts
+more lines code in nesting so better way is useContext hook
+--------------------------------------------
+17 - useContext Hook Part 3
+1.createContext()
+2.provide context value high levele in tree
+3.consume the context value using render the props pattren
+
+
+first two are same 
+3 is how consume is easy with useContext
+1.import {useContext} from react
+2.import nessary context
+import {UserContext, ChannelContext} from './app'
+3.call the useContext function passing in context as it argument
+const user =useContext(UserContext)
+const channel = useContext(ChannelContext)
+------------------------------------------
+18 - useReducer Hook
+useReducer is a hook that is used for state mgmt
+it is alternative to useState
+so what is diff?
+useState is built using useReducer
+userreducer is primitive hook compare to useState hook
+when use when?
+what is Reducer:
+reduce() method executes a reducer function (that you provide) on each element on the array, resulting in a single output value
+reduce method takes 2 params 1 is reducer function and intial value 
+
+reduce vs useReducer
+
+reduce in js:
+1.array.reduce(reducer, initalValue)
+2.singleValue =reducer(accmelar, itemValue)
+3.reduce method returns single value
+useReducer in react:
+1.useReducer(reducer,initalState)
+2.newState=reducer(currentstate, action)
+3.usereducer returns a pair of values[newstate, dispatch]
+summary: 
+usereducer used for state mgmt in react
+usereducers releated to reducer function
+accepts 2 params useReducer(reducer, initialState)
+reducer(currentstate , action)
+so usereducer basically change the state in react component.
+-----------------------
+19 - useReducer (simple state & action)
+
+1.define reducer and initaial state
+initlaState =0;
+const resuce = (takes 2 values(state, action)) =>{
+actions: instrucrotn to the reducer function
+based on what action specifys the reducer performs the neccessary trnasctions
+return newstate
+}
+we do three actiions
+reset
+incr
+dece
+switch(action){
+case 'increment':
+ return state +1
+case 'decrement':
+return sata-1
+case 'reset':
+return initsalState
+default:
+return state
+}
+}
+--------------------------------------------------------------------------------------
+26 - useCallback Hook
+  const incrementAge = () => {
+    setAge(age + 1);
+  };
+  const incrementSalary = () => {
+    setSalary(salary + 500000);
+  };
+
+if we increment salary title and age shold not re render how optimize 
+react.memo
+react.memo is higher order compoennt that prevent functional component from being re render if props and state do not change
+react.memo nothing do with hooks.it is is feature 16.6
+
+usecallback:what?
+useCallback is hook that will return a memoized version of the callback function that only changes if one of the dependecys has changed
+
+why? 
+it is useful when passing callbacks to otpimize child components that rely on reference equality to prevent unnecssary renders
+
+how to use?
+import call back
+we need to call callback
+accept callback function as its 1 st parameter, array of depedencys as 2nd params 
+
+
+ const incrementAge = useCallback(() => setAge(age + 1), [age]);
+ const incrementSalary = useCallback(() => setSalary(salary + 500000),[salary]);
+
+used to optmize performance
+q:why not use call back every single time 
+https://kentcdodds.com/blog/usememo-and-usecallback
+--------------------------------------------------------------------------------------
+27 - useMemo Hook
+is hook only re compute the cached value when one of dependcy has changed. this optiomzation helps to avoid expansive calculation on every render
+diff ue callback and use memo
+usecallback caches the provided function instance itself where as usememo invokes the provided function and caches it result.
+so cache a function use callback ,when need cache a result of invoked function usememo with perfomance optiomization
+--------------------------------------------------------------------------------------
+28 - useRef Hook Part 1
+makes it possible to acess dom nodes directly with in functional componntes
+
+req foucs input elemet
+3 steps
+1.import useRef from react
+2.create ref variable by calling useref and passing in initial value as null
+after create ref we need attach it to the input element, and attach ref use reserved ref attribute  
+3.call foucs method on input element
+
+const inputRef = useRef(null);
+<input type="text" ref={inputRef}></input>//ref is reserverduseEffect(() => {
+    //focus the element
+    inputRef.current.focus();//react sets current property to the corrsonding node
+  }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
